@@ -62,30 +62,69 @@ Theta2_grad = zeros(size(Theta2));
 %               and Theta2_grad from Part 2.
 %
 
+% recode label y to one of k type
+Y = zeros(m, num_labels);
+for i = 1:m
+    Y(i, y(i)) = 1;
+end
 
 
+a_1 = [ones(m, 1) X];
+z_2 = a_1*Theta1';
+a_2 = sigmoid(z_2);
+a_2 = [ones(m, 1) a_2];
+z_3 = a_2*Theta2';
+a_3 = sigmoid(z_3);
 
+% cost with regularization, loop on num_labels, based on assignment 3
+% for j = 1:num_labels
+%     y = Y(:, j);
+%     pos = find(y == 1);
+%     neg = find(y == 0);
+%     sum_j = ( sum( -y(pos).*log(a_3(pos, j))) - sum((1-y(neg)).*log(1 - a_3(neg, j))) )/ m;
+%     J = J + sum_j;
+% end
+% 
+% J = J / 10;
 
+% cost with regularization, loop on num of trianing examples
+for i = 1:m
+    J = J + sum( (-1) * Y(i, :) .* log(a_3(i, :)) - (1 - Y(i, :)) .* log(1 - a_3(i, :)));
+end
+J = J / m;
 
+% get the grad without regularization
+Delta1 = zeros(size(Theta1));
+Delta2 = zeros(size(Theta2));
 
+% implements backpropagation on each example
+for i = 1:m
+    % step 1, forward pass, which we can get from a_3
+    
+    % step 2, set delta_3 for each output unit k
+    delta_3 = a_3(i, :) - Y(i, :); 
+    delta_3 = delta_3'; % 10*1
+    
+    % step 3, set delta_2 based on delta_3
+    temp = Theta2' * delta_3;
+    delta_2 = temp(2:end, :) .* sigmoidGradient(z_2(i, :)'); % 25*1
+    
+    % step 4
+    Delta2 = Delta2 + delta_3 * a_2(i, :); % 10*26
+    Delta1 = Delta1 + delta_2 * a_1(i, :); % 25*401 
+end
 
+Theta1_grad = Delta1 / m;
+Theta2_grad = Delta2 / m;
 
+%----------------------------------------part 4----------------------------------
 
+J = J + lambda * ( sum(sum(Theta1(:, 2:end).^2)) + sum(sum(Theta2(:, 2:end).^2)) ) / 2 / m;
 
-
-
-
-
-
-
-
-
-% -------------------------------------------------------------
-
+Theta1_grad(:, 2:end) = Theta1_grad(:, 2:end) + lambda * Theta1(:, 2:end) / m;
+Theta2_grad(:, 2:end) = Theta2_grad(:, 2:end) + lambda * Theta2(:, 2:end) / m;
 % =========================================================================
 
 % Unroll gradients
 grad = [Theta1_grad(:) ; Theta2_grad(:)];
-
-
 end
