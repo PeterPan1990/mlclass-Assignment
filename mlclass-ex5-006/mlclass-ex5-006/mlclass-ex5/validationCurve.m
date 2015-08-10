@@ -33,20 +33,20 @@ error_val = zeros(length(lambda_vec), 1);
 %           % regression with regularization parameter lambda
 %           % You should store the result in error_train(i)
 %           % and error_val(i)
-%           ....
-%           
+%           ....    
 %       end
-%
-%
 
-
-
-
-
-
-
-
-
+for i = 1:length(lambda_vec)
+    % get lambda
+    lambda = lambda_vec(i);
+    
+     % fit theta with different size of training set
+    [theta] = trainLinearReg(X, y, lambda);
+    
+    % get the error on training set and validation set
+    error_train(i, 1) = linearRegCostFunction(X, y, theta, 0);
+    error_val(i, 1) = linearRegCostFunction(Xval, yval, theta, 0);
+end
 
 % =========================================================================
 

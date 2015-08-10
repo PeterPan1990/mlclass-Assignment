@@ -20,11 +20,11 @@ S = zeros(n);
 %       number of examples).
 %
 
+% first step: compute the covariance matrix
+Sigma = X'*X;
 
-
-
-
-
+% second step: do svd decompose
+[U, S, V] = svd(Sigma);
 
 % =========================================================================
 

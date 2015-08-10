@@ -33,7 +33,8 @@ load ('ex7data1.mat');
 
 %  Visualize the example dataset
 plot(X(:, 1), X(:, 2), 'bo');
-axis([0.5 6.5 2 8]); axis square;
+axis([0.5 6.5 2 8]);
+axis square;
 
 fprintf('Program paused. Press enter to continue.\n');
 pause;

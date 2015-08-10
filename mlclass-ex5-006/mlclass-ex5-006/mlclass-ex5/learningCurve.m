@@ -52,12 +52,18 @@ error_val   = zeros(m, 1);
 %
 
 % ---------------------- Sample Solution ----------------------
-
-
-
-
-
-
+for i = 1:m
+    % get the train set
+    train_X = X(1:i, :);
+    train_y = y(1:i);
+    
+    % fit theta with different size of training set
+    [theta] = trainLinearReg(train_X, train_y, lambda);
+    
+    % get the error on training set and validation set
+    error_train(i, 1) = linearRegCostFunction(train_X, train_y, theta, 0);
+    error_val(i, 1) = linearRegCostFunction(Xval, yval, theta, 0);
+end
 
 % -------------------------------------------------------------
 
